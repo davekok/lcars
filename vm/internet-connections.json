@@ -1,0 +1,743 @@
+[
+  {
+    "head": {
+      "description": "Vehicles",
+      "layer": "main",
+      "layout": "header-main-layout",
+      "component": "table",
+      "slot": "main",
+      "joins": [
+        "@menu"
+      ]
+    },
+    "schema": [
+      {
+        "name": "protocol",
+        "label": "Protocol",
+        "type": "text"
+      },
+      {
+        "name": "ipv4",
+        "label": "IPv4",
+        "type": "text"
+      },
+      {
+        "name": "port",
+        "label": "Port",
+        "type": "number"
+      },
+      {
+        "name": "userAgent",
+        "label": "UserAgent",
+        "type": "text"
+      },
+      {
+        "name": "mac",
+        "label": "MAC",
+        "type": "text"
+      }
+    ],
+    "data": [
+      {
+        "protocol": "http",
+        "ipv4": "255.184.238.0",
+        "port": 8396,
+        "userAgent": "Mozilla/5.0 (X11; Linux i686; rv:6.2) Gecko/20100101 Firefox/6.2.0",
+        "mac": "26:5a:6e:8d:65:a8"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "113.224.58.7",
+        "port": 35023,
+        "userAgent": "Mozilla/5.0 (Macintosh; PPC Mac OS X 10_5_9 rv:2.0; RM) AppleWebKit/534.1.1 (KHTML, like Gecko) Version/7.1.10 Safari/534.1.1",
+        "mac": "c5:1b:8e:de:d1:d0"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "43.15.224.171",
+        "port": 6445,
+        "userAgent": "Opera/11.53 (Macintosh; Intel Mac OS X 10.6.6 U; FI Presto/2.9.169 Version/10.00)",
+        "mac": "ac:d6:00:c9:fa:b4"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "114.202.56.26",
+        "port": 4807,
+        "userAgent": "Opera/10.90 (Macintosh; Intel Mac OS X 10.6.1 U; CA Presto/2.9.176 Version/10.00)",
+        "mac": "1a:e3:e4:47:90:99"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "37.244.150.66",
+        "port": 45859,
+        "userAgent": "Mozilla/5.0 (Windows NT 5.1; Win64; x64; rv:10.4) Gecko/20100101 Firefox/10.4.9",
+        "mac": "80:c8:0a:28:cf:09"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "231.138.35.114",
+        "port": 9127,
+        "userAgent": "Mozilla/5.0 (Windows NT 6.2; Trident/7.0; Touch; rv:11.0) like Gecko",
+        "mac": "82:ae:55:9c:ab:2e"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "159.165.192.90",
+        "port": 22865,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 5.3)AppleWebKit/533.2.2 (KHTML, like Gecko) Version/7.0.7 Safari/533.2.2",
+        "mac": "79:11:cf:17:59:f6"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "60.195.231.197",
+        "port": 37596,
+        "userAgent": "Mozilla/5.0 (Windows NT 6.2; rv:13.6) Gecko/20100101 Firefox/13.6.1",
+        "mac": "0e:b5:7e:c9:70:4e"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "176.141.255.17",
+        "port": 11294,
+        "userAgent": "Opera/10.69 (Windows NT 5.0; U; EO Presto/2.9.183 Version/12.00)",
+        "mac": "c8:c3:e0:b8:12:06"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "27.7.130.63",
+        "port": 6693,
+        "userAgent": "Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/5.1)",
+        "mac": "41:34:19:9f:68:50"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "204.74.59.183",
+        "port": 52894,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 6.1)AppleWebKit/534.2.2 (KHTML, like Gecko) Version/6.0.1 Safari/534.2.2",
+        "mac": "50:21:e0:e1:c3:9b"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "143.167.3.33",
+        "port": 4716,
+        "userAgent": "Mozilla/5.0 (X11; Linux i686; rv:8.5) Gecko/20100101 Firefox/8.5.2",
+        "mac": "14:2b:23:f9:5f:0d"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "61.76.126.52",
+        "port": 40629,
+        "userAgent": "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; Touch; rv:11.0) like Gecko",
+        "mac": "c0:a1:07:d9:c9:75"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "253.27.148.37",
+        "port": 24912,
+        "userAgent": "Opera/14.66 (Macintosh; Intel Mac OS X 10.7.2 U; CA Presto/2.9.162 Version/12.00)",
+        "mac": "53:a1:31:c2:15:41"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "36.49.238.163",
+        "port": 37787,
+        "userAgent": "Opera/10.32 (X11; Linux i686; U; NN Presto/2.9.188 Version/11.00)",
+        "mac": "b8:cb:e2:ea:06:3b"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "193.242.101.243",
+        "port": 60633,
+        "userAgent": "Opera/12.92 (Windows NT 5.1; U; JV Presto/2.9.188 Version/10.00)",
+        "mac": "29:08:7e:ce:56:9f"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "44.90.32.20",
+        "port": 8852,
+        "userAgent": "Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10_10_8 rv:3.0; AF) AppleWebKit/531.0.1 (KHTML, like Gecko) Version/5.0.1 Safari/531.0.1",
+        "mac": "58:2e:c8:54:f5:9e"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "61.216.6.231",
+        "port": 63289,
+        "userAgent": "Opera/13.57 (Macintosh; Intel Mac OS X 10.6.1 U; KA Presto/2.9.189 Version/11.00)",
+        "mac": "50:f9:36:3c:d5:3e"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "147.139.47.48",
+        "port": 51637,
+        "userAgent": "Opera/9.42 (Macintosh; Intel Mac OS X 10.5.6 U; HR Presto/2.9.188 Version/11.00)",
+        "mac": "0d:fc:64:f1:92:d3"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "106.160.89.73",
+        "port": 45867,
+        "userAgent": "Opera/14.3 (X11; Linux x86_64; U; RO Presto/2.9.183 Version/10.00)",
+        "mac": "be:d0:54:a7:75:63"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "5.102.136.81",
+        "port": 8532,
+        "userAgent": "Mozilla/5.0 (Macintosh; PPC Mac OS X 10_9_6 rv:2.0; FA) AppleWebKit/534.0.2 (KHTML, like Gecko) Version/5.0.3 Safari/534.0.2",
+        "mac": "3c:0e:ee:ca:84:04"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "218.138.135.220",
+        "port": 52570,
+        "userAgent": "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_7_7)  AppleWebKit/531.2.0 (KHTML, like Gecko) Chrome/13.0.856.0 Safari/531.2.0",
+        "mac": "17:c5:a1:c6:b1:3f"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "46.71.207.221",
+        "port": 57341,
+        "userAgent": "Mozilla/5.0 (X11; Linux i686 AppleWebKit/536.1.0 (KHTML, like Gecko) Chrome/27.0.846.0 Safari/536.1.0",
+        "mac": "e5:73:d9:d4:2e:8e"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "65.55.28.112",
+        "port": 12646,
+        "userAgent": "Opera/9.20 (Macintosh; Intel Mac OS X 10.8.2 U; MT Presto/2.9.186 Version/10.00)",
+        "mac": "62:99:35:1e:8c:73"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "51.159.174.139",
+        "port": 10237,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_0 rv:4.0; TK) AppleWebKit/532.2.2 (KHTML, like Gecko) Version/7.1.0 Safari/532.2.2",
+        "mac": "45:6d:1d:58:0d:9f"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "211.160.218.82",
+        "port": 6471,
+        "userAgent": "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_7_7)  AppleWebKit/536.2.2 (KHTML, like Gecko) Chrome/32.0.803.0 Safari/536.2.2",
+        "mac": "9c:fb:44:54:3a:a5"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "203.131.114.157",
+        "port": 51298,
+        "userAgent": "Mozilla/5.0 (X11; Linux i686 AppleWebKit/534.0.2 (KHTML, like Gecko) Chrome/22.0.890.0 Safari/534.0.2",
+        "mac": "88:6f:fa:3f:f8:a8"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "34.117.91.227",
+        "port": 1718,
+        "userAgent": "Opera/14.3 (Windows NT 5.1; U; NN Presto/2.9.177 Version/12.00)",
+        "mac": "dc:b7:b7:3d:78:94"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "124.52.70.63",
+        "port": 14771,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.5.8; rv:13.9) Gecko/20100101 Firefox/13.9.4",
+        "mac": "87:3b:c4:47:03:91"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "42.97.128.191",
+        "port": 51614,
+        "userAgent": "Opera/14.73 (X11; Linux x86_64; U; ET Presto/2.9.176 Version/10.00)",
+        "mac": "09:b2:75:f1:38:4b"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "116.109.92.27",
+        "port": 53477,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 5.3)AppleWebKit/537.1.2 (KHTML, like Gecko) Version/6.0.10 Safari/537.1.2",
+        "mac": "d4:6d:da:a0:2b:19"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "174.17.149.117",
+        "port": 37586,
+        "userAgent": "Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10_7_3)  AppleWebKit/531.2.2 (KHTML, like Gecko) Chrome/33.0.883.0 Safari/531.2.2",
+        "mac": "7f:79:7a:71:cf:6c"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "254.9.167.198",
+        "port": 2452,
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64 AppleWebKit/535.2.0 (KHTML, like Gecko) Chrome/27.0.810.0 Safari/535.2.0",
+        "mac": "04:fc:ee:c8:eb:21"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "157.48.214.159",
+        "port": 45613,
+        "userAgent": "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.3; Trident/6.1)",
+        "mac": "4e:f6:93:a2:71:ed"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "37.217.67.165",
+        "port": 53679,
+        "userAgent": "Opera/14.26 (Windows NT 6.2; U; KG Presto/2.9.168 Version/12.00)",
+        "mac": "5c:e1:5e:60:83:fd"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "78.183.123.228",
+        "port": 42601,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 6.3) AppleWebKit/535.0.0 (KHTML, like Gecko) Chrome/36.0.855.0 Safari/535.0.0",
+        "mac": "8b:47:ea:74:50:e9"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "79.209.132.214",
+        "port": 60057,
+        "userAgent": "Opera/14.37 (Macintosh; Intel Mac OS X 10.5.9 U; SW Presto/2.9.189 Version/11.00)",
+        "mac": "d6:ea:32:16:35:52"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "219.155.26.105",
+        "port": 62463,
+        "userAgent": "Mozilla/5.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/6.0; .NET CLR 4.5.53060.3)",
+        "mac": "60:43:0a:27:c8:22"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "146.237.255.27",
+        "port": 53532,
+        "userAgent": "Opera/10.90 (Macintosh; Intel Mac OS X 10.9.5 U; MK Presto/2.9.161 Version/12.00)",
+        "mac": "13:11:7e:65:f9:2f"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "106.196.50.211",
+        "port": 10880,
+        "userAgent": "Mozilla/5.0 (Macintosh; PPC Mac OS X 10_5_9 rv:3.0; RM) AppleWebKit/536.0.1 (KHTML, like Gecko) Version/5.0.8 Safari/536.0.1",
+        "mac": "97:77:92:50:1c:55"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "252.42.56.118",
+        "port": 22197,
+        "userAgent": "Mozilla/5.0 (Macintosh; PPC Mac OS X 10_10_1 rv:2.0; FR) AppleWebKit/531.2.0 (KHTML, like Gecko) Version/4.1.7 Safari/531.2.0",
+        "mac": "ad:c5:26:0d:8e:c7"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "249.172.178.175",
+        "port": 49388,
+        "userAgent": "Opera/12.80 (Macintosh; Intel Mac OS X 10.5.1 U; JV Presto/2.9.170 Version/12.00)",
+        "mac": "9d:9a:7a:d9:34:68"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "171.140.90.63",
+        "port": 56087,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 5.2) AppleWebKit/532.2.0 (KHTML, like Gecko) Chrome/33.0.826.0 Safari/532.2.0",
+        "mac": "68:c6:50:3d:c7:4f"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "14.190.41.56",
+        "port": 11966,
+        "userAgent": "Mozilla/5.0 (Macintosh; PPC Mac OS X 10.7.7; rv:7.2) Gecko/20100101 Firefox/7.2.1",
+        "mac": "02:1e:aa:cb:12:3a"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "154.234.167.182",
+        "port": 33927,
+        "userAgent": "Opera/14.48 (Windows NT 5.2; U; TY Presto/2.9.169 Version/11.00)",
+        "mac": "1b:07:12:6f:c2:63"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "110.136.103.114",
+        "port": 9617,
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:8.1) Gecko/20100101 Firefox/8.1.0",
+        "mac": "7c:e3:e9:db:fa:49"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "75.11.187.92",
+        "port": 61951,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_8)  AppleWebKit/538.2.1 (KHTML, like Gecko) Chrome/33.0.819.0 Safari/538.2.1",
+        "mac": "76:14:31:1e:e5:b8"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "126.147.33.51",
+        "port": 13530,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 5.2)AppleWebKit/537.1.1 (KHTML, like Gecko) Version/5.1.1 Safari/537.1.1",
+        "mac": "ec:91:cf:c2:f9:a0"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "201.17.48.136",
+        "port": 34596,
+        "userAgent": "Opera/10.55 (X11; Linux i686; U; EL Presto/2.9.171 Version/10.00)",
+        "mac": "8c:db:d2:4d:f0:ed"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "143.180.103.166",
+        "port": 49725,
+        "userAgent": "Mozilla/5.0 (X11; Linux i686; rv:13.9) Gecko/20100101 Firefox/13.9.9",
+        "mac": "60:1e:4d:3b:d8:8b"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "199.194.95.108",
+        "port": 50483,
+        "userAgent": "Mozilla/5.0 (X11; Linux i686 AppleWebKit/536.1.1 (KHTML, like Gecko) Chrome/20.0.869.0 Safari/536.1.1",
+        "mac": "00:bc:5e:b3:81:13"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "77.232.226.45",
+        "port": 35596,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 5.2) AppleWebKit/532.0.0 (KHTML, like Gecko) Chrome/29.0.894.0 Safari/532.0.0",
+        "mac": "50:77:71:d9:69:55"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "67.56.80.119",
+        "port": 59304,
+        "userAgent": "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.7.4; rv:11.7) Gecko/20100101 Firefox/11.7.8",
+        "mac": "c7:71:af:22:62:e2"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "222.196.252.129",
+        "port": 61528,
+        "userAgent": "Opera/9.66 (Macintosh; Intel Mac OS X 10.8.8 U; UR Presto/2.9.188 Version/11.00)",
+        "mac": "13:2d:b4:fb:98:ff"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "159.180.214.46",
+        "port": 519,
+        "userAgent": "Mozilla/5.0 (Macintosh; PPC Mac OS X 10_7_9 rv:6.0; AB) AppleWebKit/535.0.0 (KHTML, like Gecko) Version/4.1.0 Safari/535.0.0",
+        "mac": "d6:79:4d:c9:78:2d"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "190.229.83.125",
+        "port": 16036,
+        "userAgent": "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 5.2; Trident/6.0; .NET CLR 2.5.58274.1)",
+        "mac": "ef:f4:31:82:20:bb"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "144.0.203.3",
+        "port": 33231,
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:14.6) Gecko/20100101 Firefox/14.6.0",
+        "mac": "46:2a:a2:25:42:f6"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "61.217.104.134",
+        "port": 63912,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 6.2) AppleWebKit/532.2.1 (KHTML, like Gecko) Chrome/23.0.828.0 Safari/532.2.1",
+        "mac": "d4:97:46:cb:60:59"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "7.178.16.68",
+        "port": 16882,
+        "userAgent": "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 5.0; Trident/5.1; .NET CLR 1.8.39590.8)",
+        "mac": "c2:e9:3e:87:8e:74"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "155.239.174.99",
+        "port": 14955,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 6.1) AppleWebKit/533.1.1 (KHTML, like Gecko) Chrome/22.0.854.0 Safari/533.1.1",
+        "mac": "cc:2e:5c:29:b2:b6"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "191.64.8.177",
+        "port": 31594,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7.6; rv:9.5) Gecko/20100101 Firefox/9.5.3",
+        "mac": "03:a2:b6:98:a2:28"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "207.131.34.224",
+        "port": 50813,
+        "userAgent": "Mozilla/5.0 (X11; Linux i686 AppleWebKit/534.2.1 (KHTML, like Gecko) Chrome/26.0.869.0 Safari/534.2.1",
+        "mac": "2a:5d:4d:d8:ca:67"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "2.37.182.130",
+        "port": 33323,
+        "userAgent": "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:14.8) Gecko/20100101 Firefox/14.8.6",
+        "mac": "10:70:ff:f9:a0:27"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "137.144.143.119",
+        "port": 60431,
+        "userAgent": "Opera/14.30 (Macintosh; Intel Mac OS X 10.9.4 U; LI Presto/2.9.172 Version/12.00)",
+        "mac": "51:7f:10:13:f6:c1"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "159.149.12.232",
+        "port": 18653,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 6.0)AppleWebKit/536.2.0 (KHTML, like Gecko) Version/5.0.2 Safari/536.2.0",
+        "mac": "0b:f5:1c:c7:88:70"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "164.3.89.16",
+        "port": 15021,
+        "userAgent": "Mozilla/5.0 (Macintosh; PPC Mac OS X 10_8_9)  AppleWebKit/538.1.0 (KHTML, like Gecko) Chrome/24.0.836.0 Safari/538.1.0",
+        "mac": "bc:a8:ee:a5:33:6e"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "11.248.243.0",
+        "port": 36464,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5)  AppleWebKit/537.2.2 (KHTML, like Gecko) Chrome/30.0.803.0 Safari/537.2.2",
+        "mac": "d9:02:4a:5f:1d:a7"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "181.90.199.55",
+        "port": 32430,
+        "userAgent": "Opera/11.36 (Macintosh; Intel Mac OS X 10.9.1 U; IT Presto/2.9.182 Version/10.00)",
+        "mac": "75:79:eb:8d:60:44"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "191.107.221.6",
+        "port": 58766,
+        "userAgent": "Mozilla/5.0 (Macintosh; PPC Mac OS X 10.5.2; rv:10.4) Gecko/20100101 Firefox/10.4.9",
+        "mac": "a2:70:cc:2f:1d:62"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "195.49.48.196",
+        "port": 22297,
+        "userAgent": "Mozilla/5.0 (Macintosh; PPC Mac OS X 10.7.2; rv:7.6) Gecko/20100101 Firefox/7.6.0",
+        "mac": "6f:a4:19:26:05:16"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "194.103.220.82",
+        "port": 33800,
+        "userAgent": "Opera/14.95 (Windows NT 6.3; U; TY Presto/2.9.190 Version/10.00)",
+        "mac": "80:b1:b7:45:de:57"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "138.121.229.65",
+        "port": 29270,
+        "userAgent": "Mozilla/5.0 (X11; Linux i686 AppleWebKit/531.0.0 (KHTML, like Gecko) Chrome/23.0.832.0 Safari/531.0.0",
+        "mac": "b8:53:7a:d2:f1:0d"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "60.57.98.91",
+        "port": 37456,
+        "userAgent": "Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10_5_9)  AppleWebKit/537.0.1 (KHTML, like Gecko) Chrome/32.0.881.0 Safari/537.0.1",
+        "mac": "54:78:b5:88:3f:c4"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "171.240.83.247",
+        "port": 50756,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 6.1) AppleWebKit/534.2.0 (KHTML, like Gecko) Chrome/33.0.815.0 Safari/534.2.0",
+        "mac": "78:3a:0f:55:08:be"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "64.110.165.196",
+        "port": 10795,
+        "userAgent": "Opera/9.4 (Macintosh; Intel Mac OS X 10.6.6 U; GA Presto/2.9.183 Version/10.00)",
+        "mac": "d9:78:b9:26:9d:d7"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "3.109.223.70",
+        "port": 43004,
+        "userAgent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko",
+        "mac": "10:73:81:16:7d:41"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "121.103.32.246",
+        "port": 50651,
+        "userAgent": "Opera/11.48 (X11; Linux i686; U; EO Presto/2.9.165 Version/10.00)",
+        "mac": "6f:ff:f9:ff:b5:0e"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "111.238.60.211",
+        "port": 61658,
+        "userAgent": "Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10_9_7 rv:5.0; LV) AppleWebKit/533.0.1 (KHTML, like Gecko) Version/5.1.0 Safari/533.0.1",
+        "mac": "47:94:db:08:2c:d9"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "179.136.214.63",
+        "port": 34698,
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:14.3) Gecko/20100101 Firefox/14.3.4",
+        "mac": "18:e1:34:d9:ea:71"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "101.134.14.159",
+        "port": 33528,
+        "userAgent": "Mozilla/5.0 (compatible; MSIE 7.0; Windows NT 5.2; Trident/7.0)",
+        "mac": "51:a3:a9:b3:e2:62"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "216.216.154.221",
+        "port": 63148,
+        "userAgent": "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.8.6; rv:11.5) Gecko/20100101 Firefox/11.5.4",
+        "mac": "80:4c:cf:88:43:ac"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "1.111.84.111",
+        "port": 60136,
+        "userAgent": "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_8)  AppleWebKit/536.2.2 (KHTML, like Gecko) Chrome/32.0.887.0 Safari/536.2.2",
+        "mac": "55:e1:1b:07:82:f9"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "9.59.51.217",
+        "port": 51662,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 5.3)AppleWebKit/536.0.2 (KHTML, like Gecko) Version/7.0.6 Safari/536.0.2",
+        "mac": "04:8e:38:d7:b9:e4"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "78.236.95.227",
+        "port": 16020,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_9)  AppleWebKit/538.2.0 (KHTML, like Gecko) Chrome/36.0.875.0 Safari/538.2.0",
+        "mac": "7c:2c:41:77:b7:aa"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "114.89.180.33",
+        "port": 44672,
+        "userAgent": "Opera/10.15 (X11; Linux x86_64; U; PT Presto/2.9.178 Version/11.00)",
+        "mac": "2c:be:a3:c2:96:b5"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "208.165.157.82",
+        "port": 49807,
+        "userAgent": "Opera/11.11 (Macintosh; Intel Mac OS X 10.10.3 U; SL Presto/2.9.166 Version/12.00)",
+        "mac": "d4:9a:b9:73:12:34"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "137.50.87.6",
+        "port": 31734,
+        "userAgent": "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_10_1 rv:4.0; NE) AppleWebKit/536.2.0 (KHTML, like Gecko) Version/7.1.7 Safari/536.2.0",
+        "mac": "79:d3:68:ee:04:7d"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "232.218.84.203",
+        "port": 44765,
+        "userAgent": "Opera/11.87 (X11; Linux x86_64; U; DA Presto/2.9.185 Version/10.00)",
+        "mac": "cd:6a:25:72:1a:ed"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "210.214.160.93",
+        "port": 62672,
+        "userAgent": "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/7.0; .NET CLR 2.8.99275.7)",
+        "mac": "69:fd:8c:21:16:5e"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "244.162.121.105",
+        "port": 17557,
+        "userAgent": "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko",
+        "mac": "23:61:71:86:c1:79"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "83.67.26.233",
+        "port": 41725,
+        "userAgent": "Mozilla/5.0 (X11; Linux i686 AppleWebKit/537.1.0 (KHTML, like Gecko) Chrome/31.0.896.0 Safari/537.1.0",
+        "mac": "53:f8:14:3d:e3:90"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "36.0.21.58",
+        "port": 21990,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_7)  AppleWebKit/532.2.2 (KHTML, like Gecko) Chrome/31.0.826.0 Safari/532.2.2",
+        "mac": "71:df:77:53:44:ef"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "200.126.1.65",
+        "port": 607,
+        "userAgent": "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 5.1; Trident/4.0)",
+        "mac": "73:11:2d:ab:b9:33"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "159.207.163.206",
+        "port": 21467,
+        "userAgent": "Opera/14.45 (Windows NT 5.3; U; NE Presto/2.9.169 Version/12.00)",
+        "mac": "4d:9f:63:61:27:38"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "0.77.144.189",
+        "port": 8766,
+        "userAgent": "Mozilla/5.0 (Windows; U; Windows NT 6.2)AppleWebKit/536.2.0 (KHTML, like Gecko) Version/7.1.0 Safari/536.2.0",
+        "mac": "39:21:25:db:f1:e6"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "97.199.106.139",
+        "port": 40574,
+        "userAgent": "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 5.1; Trident/5.1)",
+        "mac": "41:18:25:49:9f:36"
+      },
+      {
+        "protocol": "http",
+        "ipv4": "100.242.202.243",
+        "port": 42275,
+        "userAgent": "Mozilla/5.0 (Macintosh; PPC Mac OS X 10_5_1)  AppleWebKit/536.2.0 (KHTML, like Gecko) Chrome/21.0.845.0 Safari/536.2.0",
+        "mac": "a5:13:9e:8b:49:6b"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "138.141.179.101",
+        "port": 60985,
+        "userAgent": "Mozilla/5.0 (Macintosh; PPC Mac OS X 10_10_0 rv:2.0; VO) AppleWebKit/537.0.2 (KHTML, like Gecko) Version/5.0.7 Safari/537.0.2",
+        "mac": "a7:1c:3f:85:1e:69"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "125.86.5.142",
+        "port": 21766,
+        "userAgent": "Opera/13.62 (Macintosh; Intel Mac OS X 10.9.4 U; MY Presto/2.9.164 Version/11.00)",
+        "mac": "05:89:ae:b9:bf:97"
+      },
+      {
+        "protocol": "https",
+        "ipv4": "189.53.9.40",
+        "port": 50117,
+        "userAgent": "Mozilla/5.0 (Macintosh; PPC Mac OS X 10_6_5)  AppleWebKit/532.0.2 (KHTML, like Gecko) Chrome/15.0.876.0 Safari/532.0.2",
+        "mac": "b0:88:cc:6a:ce:11"
+      }
+    ]
+  }
+]

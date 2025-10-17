@@ -1,0 +1,30 @@
+[
+  {
+    "head": {
+      "component": "tabs",
+      "slot": "nav"
+    },
+    "links": [
+      {
+        "ref": "welcome",
+        "title": "Welcome",
+        "id": "93838"
+      },
+      {
+        "ref": "lorem",
+        "title": "lorem",
+        "id": "2737"
+      },
+      {
+        "ref": "vehicles",
+        "title": "Vehicles",
+        "id": "5841"
+      },
+      {
+        "ref": "internet-connections",
+        "title": "Internet Connections",
+        "id": "4685"
+      }
+    ]
+  }
+]

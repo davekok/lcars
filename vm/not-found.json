@@ -1,0 +1,9 @@
+[
+  {
+    "head": {
+      "layer": "dialog",
+      "component": "dialog",
+      "joins": ["@current"]
+    }
+  }
+]

@@ -1,0 +1,59 @@
+:root {
+    background-color: var(--theme-color-background);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    box-sizing: border-box;
+    border: none;
+    padding: 0;
+
+    --text-font-family: Verdana, Geneva, Tahoma, sans-serif;
+    --header-height: 13rem;
+    --stylish-vbar-gap-height: 0.4rem;
+    --stylish-vbar-gap2-height: 0.2rem;
+    --stylish-vbar-width: 8rem;
+    --stylish-vbar1-height: 5.6rem;
+    --stylish-vbar2-height: 5.7rem;
+    --stylish-vbar3-height: 8.6rem;
+    --stylish-vbar4-height: 3.1rem;
+    --stylish-vbar5-height: 5.6rem;
+    --stylish-hbar-gap-width: 0.3rem;
+    --stylish-hbar-gap-height: 0.5rem;
+    --stylish-hbar-height: 1rem;
+    --stylish-hbar-small-height: 0.4rem;
+    --stylish-hbar1-width: 2rem;
+    --stylish-hbar2-width: 21rem;
+    --stylish-hbar3-width: 9.5rem;
+    --stylish-hbar4-width: 1.7rem;
+    --stylish-button-handle: 0.7rem;
+    --outer-radius: 5rem;
+    --inner-radius: 2rem;
+    --button-radius: 1rem;
+    --button-line-height: 4.2rem;
+    --page-width: 50rem;
+
+    &, &.theme-default, &.theme-classic {
+        --theme-color-background: #111;
+        --theme-color-1: #ff9900;
+        --theme-color-2: #9999ff;
+        --theme-color-3: #cc6666;
+        --theme-color-4: #cc99cc;
+        --theme-color-5: #ff9966;
+        --theme-color-6: #ffcc99;
+        --theme-color-7: #f8fbdb;
+    }
+
+    &.theme-engineering {
+        --theme-color-background: hsl(0, 0%, 22.5%);
+        --theme-color-1: hsl(1, 62.5%, 65.5%);
+        --theme-color-2: hsl(27, 70%, 47.3%);
+        --theme-color-3: hsl(27, 100%, 59%);
+        --theme-color-4: hsl(27, 90.5%, 54.9%);
+        --theme-color-5: hsl(27, 89.5%, 74.1%);
+        --theme-color-6: hsl(140, 39.5%, 69.5%);
+        --theme-color-7: hsl(210, 4%, 95%);
+    }
+}
