@@ -1,31 +1,32 @@
-[
-  {
-    "head": {
-      "title": "Dave Kok",
-      "language": "en",
-      "description": "Welcome to my site",
-      "design": "lcars",
-      "theme": "classic",
-      "layer": "main",
-      "layout": "header-main-layout",
-      "component": "text",
-      "slot": "main",
-      "joins": ["@menu"]
-    },
-    "data": {
-      "text": "Welcome"
-    },
-    "links": [
-      {
-        "ref": "welcome",
-        "title": "Welcome",
-        "id": "93838"
-      },
-      {
-        "ref": "lorem",
-        "title": "lorem",
-        "id": "2737"
-      }
+{
+  "head": {
+    "title": "LCARS",
+    "language": "en",
+    "description": "Welcome to LCARS tech preview",
+    "design": "lcars",
+    "theme": "classic",
+    "layer": "main",
+    "layout": "header-main-layout",
+    "component": "text",
+    "shape": "object",
+    "slot": "main",
+    "joins": [
+      "@menu"
     ]
-  }
-]
+  },
+  "data": {
+    "text": "Welcome"
+  },
+  "links": [
+    {
+      "ref": "welcome",
+      "title": "Welcome",
+      "id": "93838"
+    },
+    {
+      "ref": "lorem",
+      "title": "lorem",
+      "id": "2737"
+    }
+  ]
+}

@@ -1,9 +1,13 @@
-[
-  {
-    "head": {
-      "layer": "dialog",
-      "component": "dialog",
-      "joins": ["@current"]
-    }
+{
+  "head": {
+    "layer": "dialog",
+    "component": "text",
+    "shape": "object"
+  },
+  "schema": [
+    { "name":"message", "label": "Message", "text": "text" }
+  ],
+  "data": {
+    "message": "view-model not found"
   }
-]
+}

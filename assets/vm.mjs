@@ -166,17 +166,26 @@ class ViewModel {
      * Navigate to a reference.
      *
      * @param {string} ref
-     * @param {any[]|object} params
-     * @param {any[]|object} data
+     * @param {object} parameters
+     * @param {object} data
      * @return {Promise<void>}
      */
-    async navigate(ref, params, data) {
+    async navigate(ref, parameters, data) {
+        if (ref === "@current") {
+            ref = this.#current;
+        }
+        if (ref === this.#current) {
+            parameters = { ...(this.#vmMain?.parameters ?? {}), ...parameters};
+            if (!(this.#vmMain?.data instanceof Array) && !(data instanceof Array)) {
+                data = { ...(this.#vmMain?.data ?? {}), ...data};
+            }
+        }
         const response = await fetch("/", {
             body: JSON.stringify({
                 "ref": ref,
                 "current": this.#current,
-                "params": params ?? [],
-                "data": data ?? [],
+                "parameters": parameters,
+                "data": data,
             }),
             method: "POST",
             mode: "no-cors",
@@ -204,6 +213,11 @@ class ViewModel {
      * @return {Promise<void>}
      */
     async update(vm) {
+        if ("error" in vm) {
+            alert(vm.error);
+            return;
+        }
+
         this.#vmComponentModels = [];
         this.#vmLayers = new Map();
         for (const cm of vm) {
@@ -690,6 +704,85 @@ class VmSchema {
      */
     get bind() {
         return this.#schema.bind;
+    }
+
+    /**
+     * @return {string}
+     */
+    get slot() {
+        return this.#schema.slot;
+    }
+
+    /**
+     * @return {int}
+     */
+    get min() {
+        return this.#schema.min;
+    }
+
+    /**
+     * @return {int}
+     */
+    get max() {
+        return this.#schema.max;
+    }
+
+    /**
+     * @return {boolean}
+     */
+    get revalidate() {
+        return this.#schema.revalidate === true;
+    }
+
+    createField(value) {
+        let field;
+
+        if (this.options instanceof Array) {
+            field = document.createElement("select");
+            for (const option of this.options) {
+                const opt = document.createElement("option");
+                if (typeof option === "number" || typeof option === "string") {
+                    opt.value = option;
+                    opt.innerText = option;
+                    if (value == option) {
+                        opt.selected = true;
+                    }
+                } else {
+                    opt.value = option.value;
+                    opt.innerText = option.label;
+                    if (value == option.value) {
+                        opt.selected = true;
+                    }
+                }
+                field.appendChild(opt);
+            }
+        } else {
+            switch (this.type) {
+                case 'int':
+                    field = document.createElement("input");
+                    field.type = "number";
+                    field.step = "1";
+                    field.name = this.name;
+                    field.value = value;
+                    if (this.min !== undefined) {
+                        field.min = this.min.toString();
+                    }
+                    if (this.max !== undefined) {
+                        field.max = this.max.toString();
+                    }
+                    break;
+            }
+        }
+
+        if (this.label !== undefined) {
+            field.placeholder = this.label;
+            field.title = this.label;
+        }
+        if (this.revalidate) {
+            field.addEventListener("change", (event) => this.#vm.navigate("@current", {[this.name]: event.target.value}));
+        }
+
+        return field;
     }
 }
 

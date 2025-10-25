@@ -1,27 +1,28 @@
-[
-  {
-    "head": {
-      "description": "Lorem",
-      "layer": "main",
-      "layout": "header-main-layout",
-      "component": "text",
-      "slot": "main",
-      "joins": ["@menu"]
-    },
-    "data": {
-      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"
-    },
-    "links": [
-      {
-        "ref": "welcome",
-        "title": "Welcome",
-        "id": "93838"
-      },
-      {
-        "ref": "lorem",
-        "title": "lorem",
-        "id": "2737"
-      }
+{
+  "head": {
+    "description": "Lorem",
+    "layer": "main",
+    "layout": "header-main-layout",
+    "component": "text",
+    "shape": "object",
+    "slot": "main",
+    "joins": [
+      "@menu"
     ]
-  }
-]
+  },
+  "data": {
+    "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"
+  },
+  "links": [
+    {
+      "ref": "welcome",
+      "title": "Welcome",
+      "id": "93838"
+    },
+    {
+      "ref": "lorem",
+      "title": "lorem",
+      "id": "2737"
+    }
+  ]
+}

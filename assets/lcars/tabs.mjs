@@ -83,7 +83,7 @@ customElements.define("lcars-tabs", class LcarsTabs extends HTMLElement
             }
             button.link = link;
             button.title = link.title;
-            button.textContent = link.id;
+            button.textContent = link.title;
             if (link.selected) {
                 this.#select(button);
             }
