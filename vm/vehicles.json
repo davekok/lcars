@@ -36,6 +36,13 @@
   },
   "schema": [
     {
+      "name": "id",
+      "label": "Id",
+      "type": "number",
+      "state": "hidden",
+      "bind": "show-vehicle"
+    },
+    {
       "name": "manufacturer",
       "label": "Manufacturer",
       "type": "text"
@@ -71,5 +78,12 @@
       "type": "text"
     }
   ],
-  "data": "@vehicles"
+  "data": "@vehicles",
+  "links": [
+    {
+      "name": "show-vehicle",
+      "ref": "vehicle",
+      "slot": "table-row"
+    }
+  ]
 }

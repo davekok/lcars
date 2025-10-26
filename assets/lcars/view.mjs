@@ -1,3 +1,5 @@
+import {ViewElement} from "/assets/view.mjs";
+
 const css = `
     .layer {
         position: fixed;
@@ -26,20 +28,46 @@ const css = `
     }
 `;
 
-customElements.define('lcars-view', class LcarsView extends HTMLElement {
+class LcarsView extends ViewElement {
     #shadow;
 
     constructor() {
         super();
         this.#shadow = this.attachShadow({mode: 'closed'});
         this.#shadow.innerHTML = `<style>${css}</style>`;
+        this.defineLayers(["main", "dialog"]);
     }
 
-    connectedCallback() {
-        globalThis.viewModel.connect(this.#shadow, ["main", "dialog"]);
+    /**
+     * @param {string} layer
+     * @returns {string}
+     */
+    #makeLayoutId(layer) {
+        return `layer-${layer}`;
     }
 
-    disconnectedCallback() {
-        globalThis.viewModel.disconnect();
+    /**
+     * @param {string} layer
+     * @returns {Element}
+     */
+    getLayoutElement(layer) {
+        return this.#shadow.children.namedItem(this.#makeLayoutId(layer));
     }
-});
+
+    /**
+     * @param {string} layer
+     * @param {Element} layoutElement
+     */
+    setLayoutElement(layer, layoutElement) {
+        const layerId = this.#makeLayoutId(layer);
+        const existing = this.#shadow.children.namedItem(layerId);
+        if (existing) {
+            existing.replaceWith(layoutElement);
+        } else {
+            layoutElement.id = layerId;
+            this.#shadow.appendChild(layoutElement);
+        }
+    }
+}
+
+customElements.define('lcars-view', LcarsView);

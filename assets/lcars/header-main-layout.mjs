@@ -1,3 +1,5 @@
+import {LayoutSlotManager} from "/assets/view.mjs";
+
 const css = `
     :host {
         position: fixed;
@@ -81,7 +83,7 @@ const css = `
             )) 0 var(--theme-color-background);
     }
 
-    :host>header {
+    :host>:nth-child(4) {
         grid-column-start: 2;
         grid-column-end: 3;
         grid-row-start: 1;
@@ -204,6 +206,7 @@ const css = `
 customElements.define("lcars-header-main-layout", class LcarsHeaderMainLayout extends HTMLElement
 {
     #shadow;
+    #slots
     #style;
     #headerLeft;
     #headerBottom;
@@ -212,12 +215,12 @@ customElements.define("lcars-header-main-layout", class LcarsHeaderMainLayout ex
     #asideFillTop;
     #asideFillBottom;
     #mainTop;
-    #slots;
 
     constructor()
     {
         super();
-        this.#shadow = this.attachShadow({mode: 'closed'});
+        this.#shadow = this.attachShadow({ mode: 'closed' });
+        this.#slots = new LayoutSlotManager("header", "main", "nav");
         this.#style = document.createElement('style');
         this.#headerLeft = document.createElement("div");
         this.#headerBottom = document.createElement("div");
@@ -226,12 +229,6 @@ customElements.define("lcars-header-main-layout", class LcarsHeaderMainLayout ex
         this.#asideFillTop = document.createElement("div");
         this.#asideFillBottom = document.createElement("div");
         this.#mainTop = document.createElement("div");
-        this.#slots = {
-            header: document.createElement("header"),
-            main: document.createElement("main"),
-            nav: document.createElement("nav"),
-        };
-
         this.#style.textContent = css;
         this.#headerLeft.className = "header-left";
         this.#headerBottom.className = "header-bottom";
@@ -241,28 +238,23 @@ customElements.define("lcars-header-main-layout", class LcarsHeaderMainLayout ex
         this.#mainTop.className = "main-top";
 
         this.#aside.appendChild(this.#asideFillTop);
-        this.#aside.appendChild(this.#slots.nav);
+        this.#aside.appendChild(this.#slots.get("nav"));
         this.#aside.appendChild(this.#asideFillBottom);
 
         this.#shadow.appendChild(this.#style);
         this.#shadow.appendChild(this.#headerLeft);
         this.#shadow.appendChild(this.#headerBottom);
-        this.#shadow.appendChild(this.#slots.header);
+        this.#shadow.appendChild(this.#slots.get("header"));
         this.#shadow.appendChild(this.#asideTop);
         this.#shadow.appendChild(this.#aside);
         this.#shadow.appendChild(this.#mainTop);
-        this.#shadow.appendChild(this.#slots.main);
+        this.#shadow.appendChild(this.#slots.get("main"));
     }
 
     /**
-     * @param {Array<VmComponentModel>} vmLayer
-     * @returns {Promise<void>}
+     * @param {VmComponentModel[]} componentModels
      */
-    render(vmLayer)
-    {
-        for (const vmComponentModel of vmLayer) {
-            const slot = vmComponentModel.head.slot;
-            vmComponentModel.render(this.#slots[slot]).then(element => this.#slots[slot] = element)
-        }
+    renderLayout(componentModels) {
+        this.#slots.renderSlots(componentModels);
     }
 });

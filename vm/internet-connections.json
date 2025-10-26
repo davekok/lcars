@@ -18,6 +18,12 @@
   },
   "schema": [
     {
+      "name": "id",
+      "label": "Id",
+      "type": "number",
+      "state": "hidden"
+    },
+    {
       "name": "protocol",
       "label": "Protocol",
       "type": "text"

@@ -1,165 +1,62 @@
+import {ViewElement} from "/assets/view.mjs";
+
 /**
  * A simple view model implementation.
  */
 class ViewModel {
     /**
-     * Determines where web component modules are downloaded from. Could also be used for versioning.
-     *
-     * Template URL: /assets/{design}/{component}.mjs
-     * Template HTML Tag: {design}-{component}
-     *
-     * @type {string}
-     */
-    #design;
-
-    /**
-     * Whether the main view just connected to the view model instance.
-     *
-     * @type {boolean}
-     */
-    #justConnected = false;
-
-    /**
      * Array of component models, each web component gets its own model.
      *
      * @type {Array<VmComponentModel>}
      */
-    #vmComponentModels;
+    componentModels;
 
     /**
      * Component models ordered by layer.
      *
      * @type {Map<string,Array<VmComponentModel>>}
      */
-    #vmLayers;
+    layers;
 
     /**
      * The main or first component model in the response.
      *
      * @type {VmComponentModel}
      */
-    #vmMain;
+    main;
 
     /**
-     * The specified layers by the view.
+     * The view.
      *
-     * @type {Array<string>}
+     * @type {ViewElement}
      */
-    #layers;
-
-    /**
-     * The container (shadow DOM) of the view.
-     *
-     * @type {Node}
-     */
-    #container;
-
-    /**
-     * @typedef {(event: PopStateEvent) => void} PopStateEventLister
-     * @type {PopStateEventLister|null}
-     */
-    #popStateEventListener;
+    view;
 
     /**
      * The current reference.
      *
-     * @type {string}
+     * @type {string|null}
      */
-    #current;
-
-    constructor() {
-        this.#popStateEventListener = (event) => this.update(event.state);
-        globalThis.addEventListener("popstate", this.#popStateEventListener);
-    }
-
-    /**
-     * Set the window title.
-     *
-     * @param {string} value
-     */
-    set title(value) {
-        if (typeof value === "string") {
-            globalThis.document.title = value;
-        }
-    }
-
-    /**
-     * Set the document language.
-     *
-     * @param {string} value
-     */
-    set language(value) {
-        if (typeof value === "string") {
-            globalThis.document.documentElement.lang = value;
-        }
-    }
-
-    /**
-     * Set the document description.
-     *
-     * @param {string} value
-     */
-    set description(value) {
-        if (typeof value === "string") {
-            const description = globalThis.document.querySelector('head>meta[name=description]');
-            if (description) {
-                description.content = value;
-            } else {
-                const description = globalThis.document.createElement("meta");
-                description.name = "description";
-                description.content = value;
-                globalThis.document.head.appendChild(description);
-            }
-        }
-    }
-
-    /**
-     * Get the theme
-     *
-     * @return {string}
-     */
-    get theme() {
-        return globalThis.document.documentElement.className.substring(6);
-    }
-
-    /**
-     * Set the theme
-     *
-     * @param {string} value
-     */
-    set theme(value) {
-        globalThis.document.documentElement.className = `theme-${value}`;
-    }
-
-    /**
-     * @return {string}
-     */
-    get design() {
-        return this.#design;
-    }
+    current = null;
 
     /**
      * Function for the view to connect to the view model.
      *
-     * @param {Node} container
-     * @param {Array<string>} layers
+     * @param {ViewElement} view
      */
-    connect(container, layers) {
-        this.#justConnected = true;
-        this.#container = container;
-        this.#layers = layers;
-        this.render();
+    connect(view) {
+        if (!(view instanceof ViewElement)) {
+            throw new Error(`View does not extend ViewElement.`);
+        }
+        this.view = view;
+        this.view.renderView(this);
     }
 
     /**
      * Function for the view to disconnect from the view model.
      */
     disconnect() {
-        for (const layer in this.#layers) {
-            this.#getLayout(layer)?.remove();
-        }
-        this.#container = null;
-        this.#layers = [];
+        this.view = null;
     }
 
     /**
@@ -172,18 +69,18 @@ class ViewModel {
      */
     async navigate(ref, parameters, data) {
         if (ref === "@current") {
-            ref = this.#current;
+            ref = this.current;
         }
-        if (ref === this.#current) {
-            parameters = { ...(this.#vmMain?.parameters ?? {}), ...parameters};
-            if (!(this.#vmMain?.data instanceof Array) && !(data instanceof Array)) {
-                data = { ...(this.#vmMain?.data ?? {}), ...data};
+        if (ref === this.current) {
+            parameters = { ...(this.main?.parameters ?? {}), ...parameters};
+            if (!(this.main?.data instanceof Array) && !(data instanceof Array)) {
+                data = { ...(this.main?.data ?? {}), ...data};
             }
         }
         const response = await fetch("/", {
             body: JSON.stringify({
                 "ref": ref,
-                "current": this.#current,
+                "current": this.current,
                 "parameters": parameters,
                 "data": data,
             }),
@@ -195,15 +92,9 @@ class ViewModel {
             referrerPolicy: "no-referrer"
         });
         const vm = await response.json();
-        this.#current = ref;
+        this.current = ref;
         await this.update(vm);
-        if (this.#justConnected) {
-            this.#justConnected = false;
-            return;
-        }
-        if (this.#container instanceof Node) {
-            await this.render();
-        }
+        await this.view?.renderView(this);
     }
 
     /**
@@ -218,155 +109,31 @@ class ViewModel {
             return;
         }
 
-        this.#vmComponentModels = [];
-        this.#vmLayers = new Map();
+        this.componentModels = [];
+        this.layers = new Map();
         for (const cm of vm) {
-            const vmComponentModel = new VmComponentModel(this, cm);
-            const layer = vmComponentModel.head.layer;
-            if (!this.#vmLayers.has(layer)) {
-                this.#vmLayers.set(layer, []);
+            const componentModel = new VmComponentModel(this, cm);
+            const layer = componentModel.head.layer;
+            if (!this.layers.has(layer)) {
+                this.layers.set(layer, []);
             }
-            this.#vmLayers.get(layer).push(vmComponentModel);
-            this.#vmComponentModels.push(vmComponentModel);
+            this.layers.get(layer).push(componentModel);
+            this.componentModels.push(componentModel);
         }
-        this.#vmMain = this.#vmComponentModels[0];
+        this.main = this.componentModels[0];
 
-        switch (this.#vmMain.head.history) {
-            case "push":
-                globalThis.history.pushState(vm, "");
-                break;
-
-            case "replace":
-                globalThis.history.replaceState(vm, "");
-                break;
-
-            case "back":
-                globalThis.removeEventListener("popstate", this.#popStateEventListener);
-                globalThis.history.back();
-                globalThis.history.replaceState(vm, "");
-                globalThis.addEventListener("popstate", this.#popStateEventListener);
-                break;
-
-            case "ignore":
-                break;
-        }
-
-        this.title = this.#vmMain.head.title;
-        this.description = this.#vmMain.head.description;
-        this.language = this.#vmMain.head.language;
-        this.theme = this.#vmMain.head.theme;
-
-        const icon = this.#vmMain.head.icon;
-        const design = this.#vmMain.head.design;
-
-        if (typeof icon === "string") {
-            const iconElement = globalThis.document.querySelector('head>link[rel=icon]');
-            const iconHref = `/assets/${design??this.#design}/${icon}.ico`;
-            if (iconElement) {
-                iconElement.href = iconHref;
-            } else {
-                const iconElement = globalThis.document.createElement("link");
-                iconElement.rel = "icon";
-                iconElement.href = iconHref;
-                globalThis.document.head.appendChild(iconElement);
-            }
-        }
-
-        if (typeof design === "string") {
-            this.#design = design;
-            const baseUrl = `/assets/${this.#design}`;
-            const stylesheet = globalThis.document.querySelector('head>link[rel=stylesheet]');
-            const styleHref = `${baseUrl}/theme.css`;
-            if (stylesheet) {
-                stylesheet.href = styleHref;
-            } else {
-                const stylesheet = globalThis.document.createElement("link");
-                stylesheet.rel = "stylesheet";
-                stylesheet.href = styleHref;
-                globalThis.document.head.appendChild(stylesheet);
-            }
-
-            await import(`${baseUrl}/view.mjs`);
-            const tag = `${this.#vmMain.head.design}-view`;
-            const oldViewElement = globalThis.document.body.firstElementChild;
-            if (oldViewElement?.nodeName.toLowerCase() === tag.toLowerCase()) {
-                return;
-            }
-            const view = globalThis.document.createElement(tag);
-            if (globalThis.document.body.firstElementChild) {
-                globalThis.document.body.firstElementChild.replaceWith(view);
-            } else {
-                globalThis.document.body.appendChild(view);
-            }
-        }
-    }
-
-    /**
-     * Render the view model.
-     *
-     * @return {Promise<void>}
-     */
-    async render() {
-        for (const layer of this.#layers) {
-            if (!this.#vmLayers.has(layer)) {
-                this.#getLayout(layer)?.remove();
-                continue;
-            }
-
-            const vmLayer = this.#vmLayers.get(layer);
-            const vmMain = vmLayer[0];
-            const oldLayoutElement = this.#getLayout(layer);
-            if (oldLayoutElement instanceof Node && vmMain.layoutEquals(oldLayoutElement)) {
-                vmMain.renderLayout(oldLayoutElement, vmLayer);
-                continue;
-            }
-
-            const newLayoutElement = await this.createElement(vmMain.head.layoutTag);
-            newLayoutElement.id = ViewModel.#makeLayoutId(layer);
-            if (oldLayoutElement) {
-                oldLayoutElement.replaceWith(newLayoutElement);
-            } else {
-                this.#container.appendChild(newLayoutElement);
-            }
-            vmMain.renderLayout(newLayoutElement, vmLayer);
-        }
-    }
-
-    /**
-     * @param {string} layer
-     * @returns {string}
-     */
-    static #makeLayoutId(layer) {
-        return `layer-${layer}`;
-    }
-
-    /**
-     * @param {string} layer
-     * @returns {Element|null}
-     */
-    #getLayout(layer) {
-        return this.#container.children.namedItem(ViewModel.#makeLayoutId(layer));
-    }
-
-    static #moduleImported = new Set();
-
-    /**
-     * @param {string} tag
-     * @returns {Promise<Element>}
-     */
-    async createElement(tag) {
-        if (tag.startsWith(this.#design)) {
-            const module = `/assets/${this.#design}/${tag.substring(this.#design.length + 1)}.mjs`;
-            if (!ViewModel.#moduleImported.has(module)) {
-                await import(module);
-                ViewModel.#moduleImported.add(module);
-            }
-        }
-        return globalThis.document.createElement(tag);
+        globalThis.history.updateState(this.main.head.history, vm);
+        globalThis.document.updateTitle(this.main.head.title);
+        globalThis.document.updateDescription(this.main.head.description);
+        globalThis.document.updateLanguage(this.main.head.language);
+        globalThis.document.updateTheme(this.main.head.theme);
+        await globalThis.document.updateDesign(this.main.head.design);
+        globalThis.document.updateIcon(this.main.head.icon);
     }
 }
 
 class VmComponentModel {
+    #linkManager;
     #vm;
     #head;
     #parameterSchema;
@@ -381,21 +148,22 @@ class VmComponentModel {
      * @param {Object} vmComponentModel
      */
     constructor(vm, vmComponentModel) {
+        this.#linkManager = new LinkManager();
         this.#vm = vm;
         this.#head = new VmHead(vm, vmComponentModel.head);
         this.#parameters = vmComponentModel.parameters ?? {};
         this.#data = vmComponentModel.data;
         this.#schema = [];
         for (const schema of vmComponentModel.schema ?? []) {
-            this.#schema.push(new VmSchema(vm, schema));
+            this.#schema.push(new VmSchema(vm, schema, this.#linkManager, false));
         }
         this.#parameterSchema = [];
         for (const schema of vmComponentModel.parameterSchema ?? []) {
-            this.#parameterSchema.push(new VmSchema(vm, schema));
+            this.#parameterSchema.push(new VmSchema(vm, schema, this.#linkManager, true));
         }
         this.#links = [];
         for (const link of vmComponentModel.links ?? []) {
-            this.#links.push(new VmLink(vm, link));
+            this.#links.push(new VmLink(vm, link, this.#linkManager));
         }
     }
 
@@ -442,55 +210,16 @@ class VmComponentModel {
     }
 
     /**
-     * @typedef {(newElement: Element) => void} Appender
-     * @param {Element|null} oldElement
-     * @param {Appender|undefined} appender
-     * @returns {Promise<Element>}
+     * @returns {Array<VmLink>}
      */
-    async render(oldElement, appender) {
-        if (oldElement instanceof Element && oldElement.nodeName.toLowerCase() === this.#head.tag.toLowerCase()) {
-            oldElement.render(this);
-            return oldElement;
+    getLinksForSlot(slot) {
+        const links = [];
+        for (const link of this.#links) {
+            if (link.slot === slot) {
+                links.push(link);
+            }
         }
-
-        const newElement = await this.#vm.createElement(this.#head.tag);
-        if (oldElement instanceof Element) {
-            oldElement.replaceWith(newElement);
-        } else {
-            appender(newElement);
-        }
-        newElement.render(this);
-
-        return newElement;
-    }
-
-    /**
-     * @param {Element} layoutElement
-     * @returns {boolean}
-     */
-    layoutEquals(layoutElement) {
-        return layoutElement.nodeName.toLowerCase() === this.#head.layoutTag.toLowerCase();
-    }
-
-    /**
-     * @param {Element} layoutElement
-     * @param {Array<VmComponentModel>} vmLayer
-     */
-    renderLayout(layoutElement, vmLayer) {
-        layoutElement.classList.add("layer");
-
-        if (this.#head.isDynamicLayout === false) {
-            layoutElement.classList.remove("dynamic-layer");
-            layoutElement.render(vmLayer);
-            return;
-        }
-
-        layoutElement.classList.add("dynamic-layer");
-
-        this.render(
-            layoutElement.firstElementChild,
-            newElement => layoutElement.appendChild(newElement)
-        );
+        return links;
     }
 }
 
@@ -610,20 +339,6 @@ class VmHead {
     /**
      * @returns {string}
      */
-    get layoutTag() {
-        return this.makeTag(this.layout);
-    }
-
-    /**
-     * @returns {boolean}
-     */
-    get isDynamicLayout() {
-        return null === this.#head.layout ?? null;
-    }
-
-    /**
-     * @returns {string}
-     */
     get slot() {
         if (this.#head.slot === undefined || this.#head.slot === null || typeof this.#head.slot === "string") {
             return this.#head.slot ?? "main";
@@ -640,35 +355,25 @@ class VmHead {
         }
         throw new Error("Expected component to be a string.");
     }
-
-    /**
-     * @returns {string}
-     */
-    get tag() {
-        return this.makeTag(this.#head.component);
-    }
-
-    /**
-     * @returns {string}
-     */
-    makeTag(component) {
-        return component === null
-            ? "div"
-            : `${this.#vm.design}-${component}`;
-    }
 }
 
 class VmSchema {
     #vm;
     #schema;
+    #linkManager;
+    #isParameter;
 
     /**
      * @param {ViewModel} vm
      * @param {Object} schema
+     * @param {LinkManager} linkManager
+     * @param {boolean} isParameter
      */
-    constructor(vm, schema) {
+    constructor(vm, schema, linkManager, isParameter) {
         this.#vm = vm;
         this.#schema = schema;
+        this.#linkManager = linkManager;
+        this.#isParameter = isParameter;
     }
 
     /**
@@ -734,7 +439,94 @@ class VmSchema {
         return this.#schema.revalidate === true;
     }
 
-    createField(value) {
+    /**
+     * @return {boolean}
+     */
+    get hidden() {
+        return this.#schema.state === "hidden";
+    }
+
+    /**
+     * @return {boolean}
+     */
+    get editable() {
+        return this.#schema.state === undefined || this.#schema.state === "editable";
+    }
+
+    /**
+     * @return {boolean}
+     */
+    get readonly() {
+        return this.#schema.state === "readonly";
+    }
+
+    /**
+     * @return {boolean}
+     */
+    get disabled() {
+        return this.#schema.state === "disabled";
+    }
+
+    /**
+     * @return {"editable"|"hidden"|"readonly"|"disabled"}
+     */
+    get state() {
+        return this.#schema.state ?? "editable";
+    }
+
+    createLabel() {
+        if (this.state === "hidden") {
+            return null;
+        }
+
+        const label = document.createElement("label");
+        label.innerText = this.label;
+        return label;
+    }
+
+    createDisplay(value, discriminator) {
+        this.#linkManager.addField(this, value, discriminator, this.#isParameter);
+
+        if (this.state === "hidden") {
+            return null;
+        }
+
+        const display = document.createElement("span");
+
+        if (this.options instanceof Array) {
+            for (const option of this.options) {
+                const opt = document.createElement("option");
+                if (typeof option === "number" || typeof option === "string") {
+                    if (value == option) {
+                        display.innerText = option;
+                        return display;
+                    }
+                } else {
+                    if (value == option.value) {
+                        display.innerText = option.label;
+                        return display;
+                    }
+                }
+            }
+            return display;
+        }
+
+        display.innerText = value;
+
+        return display;
+    }
+
+    revalidateValue(value) {
+        this.#vm.navigate("@current", {[this.name]: value})
+    }
+
+    createField(value, discriminator) {
+        this.#linkManager.addField(this, value, discriminator, this.#isParameter);
+
+        if (this.state === "hidden") {
+            return null;
+        }
+
         let field;
 
         if (this.options instanceof Array) {
@@ -779,7 +571,7 @@ class VmSchema {
             field.title = this.label;
         }
         if (this.revalidate) {
-            field.addEventListener("change", (event) => this.#vm.navigate("@current", {[this.name]: event.target.value}));
+            field.addEventListener("change", (event) => this.revalidateValue(event.target.value));
         }
 
         return field;
@@ -789,24 +581,27 @@ class VmSchema {
 class VmLink {
     #vm;
     #link;
+    #linkManager;
 
     /**
      * @param {ViewModel} vm
      * @param {Object} link
+     * @param {LinkManager} linkManager
      */
-    constructor(vm, link) {
+    constructor(vm, link, linkManager) {
         this.#vm = vm;
         this.#link = link;
+        this.#linkManager = linkManager;
     }
 
     /**
      * @returns {string}
      */
-    get id() {
-        if (["string", "number"].indexOf(typeof this.#link.id) >= 0) {
-            return this.#link.id;
+    get name() {
+        if (["string", "number"].indexOf(typeof this.#link.name) >= 0) {
+            return this.#link.name;
         }
-        throw new Error("Expected id to be a string or number.");
+        throw new Error("Expected name to be a string or number.");
     }
 
     /**
@@ -830,10 +625,93 @@ class VmLink {
     }
 
     /**
+     * @returns {string|null}
+     */
+    get slot() {
+        if (this.#link.slot === undefined || this.#link.slot === null || typeof this.#link.slot === "string") {
+            return this.#link.slot ?? null;
+        }
+        throw new Error("Expected slot to be a string or null.");
+    }
+
+    /**
      * @returns {void}
      */
     follow() {
-        this.#vm.navigate(this.ref);
+        const {parameters, data} = this.#linkManager.getValues(this.name);
+        this.#vm.navigate(this.ref, parameters, data);
+    }
+}
+
+
+class LinkManager {
+    #links;
+
+    constructor() {
+        this.#links = new Map();
+    }
+
+    #getLinkage(link, discriminator) {
+        if (discriminator !== undefined) {
+            link += discriminator;
+        }
+
+        let linkage = this.#links.get(link);
+
+        if (linkage === undefined) {
+            linkage = {parameters: [], data: []};
+            this.#links.set(link, linkage);
+        }
+
+        return linkage;
+    }
+
+    /**
+     * @param {VmSchema} schema
+     * @param {HTMLInputElement|HTMLSelectElement|string|number|bigint|boolean} field
+     * @param {string|number} discriminator
+     * @param {boolean} isParameter
+     */
+    addField(schema, field, discriminator, isParameter) {
+        if (schema.bind === undefined) {
+            return;
+        }
+        if (isParameter) {
+            this.#getLinkage(schema.bind, discriminator).parameters.push([schema.name, field]);
+        } else {
+            this.#getLinkage(schema.bind, discriminator).data.push([schema.name, field]);
+        }
+    }
+
+    getValues(link, discriminator) {
+        if (discriminator !== undefined) {
+            link += discriminator;
+        }
+        const parameterValues = {};
+        const dataValues = {};
+        const linkage = this.#links.get(link) ?? [];
+        for (const {parameters, data} of linkage) {
+            for (const [name, field] of parameters) {
+                if (['string', 'number', 'boolean', 'bigint'].includes(typeof field)) {
+                    parameterValues[name] = field;
+                } else if ("value" in field) {
+                    parameterValues[name] = field.value;
+                } else {
+                    throw new Error(`Unable to fetch value from field ${name}.`);
+                }
+            }
+            for (const [name, field] of data) {
+                if (['string', 'number', 'boolean', 'bigint'].includes(typeof field)) {
+                    dataValues[name] = field;
+                } else if ("value" in field) {
+                    dataValues[name] = field.value;
+                } else {
+                    throw new Error(`Unable to fetch value from field ${name}.`);
+                }
+            }
+        }
+
+        return {parameters: parameterValues, data: dataValues};
     }
 }
 

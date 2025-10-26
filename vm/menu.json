@@ -8,22 +8,22 @@
     {
       "ref": "welcome",
       "title": "Welcome",
-      "id": "93838"
+      "name": "93838"
     },
     {
       "ref": "lorem",
       "title": "lorem",
-      "id": "2737"
+      "name": "2737"
     },
     {
       "ref": "vehicles",
       "title": "Vehicles",
-      "id": "5841"
+      "name": "5841"
     },
     {
       "ref": "internet-connections",
       "title": "Internet Connections",
-      "id": "4685"
+      "name": "4685"
     }
   ]
 }

@@ -71,6 +71,9 @@ return new class
             return $cvm;
         }
 
+
+        // Normally this would be a query builder to fetch data.
+
         $cvm->data = $this->loadModel(substr($cvm->data, 1));
 
         if (($cvm->head->shape ?? "none") !== "table") {

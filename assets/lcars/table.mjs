@@ -127,37 +127,32 @@ customElements.define("lcars-table", class LcarsTable extends HTMLElement
 
         let i = 0;
         for (const schema of vmComponentModel.schema) {
-            const head = this.#headRow.children.item(i++) ?? document.createElement("th");
-            head.innerText = schema.label;
-            if (head.parentElement === null) {
-                this.#headRow.appendChild(head);
+            const label = schema.createLabel();
+            if (!label) {
+                continue;
             }
+            this.#headRow.getElementChildOrCreate(i++, "th").replaceFirstElementChild(label);
         }
-        for (let d = this.#headRow.children.length - 1; d >= i; --d) {
-            this.#headRow.children.item(d).remove();
-        }
+        this.#headRow.truncateElementChildren(i);
 
         i = 0;
         for (const record of vmComponentModel.data) {
             let j = 0;
-            const row = this.#tbody.children.item(i++) ?? document.createElement("tr");
+            const row = this.#tbody.getElementChildOrCreate(i, "tr");
             for (const schema of vmComponentModel.schema) {
-                const cell = row.children.item(j++) ?? document.createElement("td");
-                cell.innerText = record[schema.name];
-                if (cell.parentElement === null) {
-                    row.appendChild(cell);
+                const display = schema.createDisplay(record[schema.name], i);
+                if (!display) {
+                    continue;
                 }
+                row.getElementChildOrCreate(j++, "td").replaceFirstElementChild(display);
             }
-            for (let d = row.children.length - 1; d >= j; --d) {
-                row.children.item(d).remove();
+            row.truncateElementChildren(j)
+            for (const link of vmComponentModel.getLinksForSlot("table-row")) {
+                row.onclick = (evt) => link.follow();
             }
-            if (row.parentElement === null) {
-                this.#tbody.appendChild(row);
-            }
+            ++i;
         }
-        for (let d = this.#tbody.children.length - 1; d >= i; --d) {
-            this.#tbody.children.item(d).remove();
-        }
+        this.#tbody.truncateElementChildren(i);
 
         if (!vmComponentModel.parameterSchema) {
             return;
@@ -168,24 +163,18 @@ customElements.define("lcars-table", class LcarsTable extends HTMLElement
             "table-bottom-right-bar": 0,
         };
         for (const schema of vmComponentModel.parameterSchema) {
+            if (schema.hidden) {
+                return;
+            }
             switch (schema.slot) {
                 case "table-bottom-left-bar":
-                    this.#renderField(this.#tableBottomLeftBar, index[schema.slot]++, schema.createField(vmComponentModel.parameters[schema.name]));
+                    this.#tableBottomLeftBar.replaceElementChild(index[schema.slot]++, schema.createField(vmComponentModel.parameters[schema.name]));
                     break;
 
                 case "table-bottom-right-bar":
-                    this.#renderField(this.#tableBottomRightBar, index[schema.slot]++, schema.createField(vmComponentModel.parameters[schema.name]));
+                    this.#tableBottomRightBar.replaceElementChild(index[schema.slot]++, schema.createField(vmComponentModel.parameters[schema.name]));
                     break;
             }
-        }
-    }
-
-    #renderField(container, index, field) {
-        const existing = container.children.item(index);
-        if (existing) {
-            existing.replaceWith(field);
-        } else {
-            container.appendChild(field);
         }
     }
 });
