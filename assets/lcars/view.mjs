@@ -1,7 +1,7 @@
 import {ViewElement} from "/assets/view.mjs";
 
 const css = `
-    .layer {
+    :host {
         position: fixed;
         left: 0;
         top: 0;
@@ -16,14 +16,14 @@ const css = `
 
         #layer-dialog {
             z-index: 1;
+        }
 
-            .dynamic-layer {
-                display: flex;
-                flex-flow: column no-wrap;
-                justify-content: center;
-                align-items: center;
-                background: rgba(0,0,0,0.66);
-            }
+        simple-layout {
+            display: flex;
+            flex-flow: column no-wrap;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.66);
         }
     }
 `;

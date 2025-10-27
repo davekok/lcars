@@ -7,7 +7,7 @@ import {assets} from "/assets/assets.mjs";
  */
 function popStateEventListener(event) {
     if (event.state instanceof Object) {
-        globalThis.viewModel.update(event.state);
+        globalThis.viewModel?.update(event.state);
     }
 }
 globalThis.addEventListener("popstate", popStateEventListener);
@@ -45,7 +45,7 @@ Document.prototype.updateTitle = function(value) {
 }
 
 Document.prototype.updateDescription = function(value) {
-    const description = this.querySelector('head>meta[name=description]');
+    const description = this.querySelector("head>meta[name=description]");
     if (description) {
         if (typeof value === "string") {
             description.content = value;
@@ -88,11 +88,6 @@ Document.prototype.updateIcon = function(value) {
 /**
  * Determines where web component modules are downloaded from. Could also be used for versioning.
  *
- * Module Template URL: /assets/{design}/{component}.mjs
- * Thema Template URL: /assets/{design}/theme.css
- * Icon Template URL: /assets/{design}/{icon}.ico
- * Template HTML Tag: {design}-{component}
- *
  * @param {string} value
  */
 Document.prototype.updateDesign = function(value) {
@@ -117,9 +112,31 @@ Document.prototype.updateDesign = function(value) {
         if (oldViewElement?.equals(tag)) {
             return;
         }
-        const view = this.createElement(tag);
-        this.body.replaceFirstElementChild(view);
+        this.body.replaceFirstElementChild(this.createElement(tag));
     });
+}
+
+/**
+ * @param {string} tag
+ * @param {VmSchema} schema
+ * @returns {Element}
+ */
+Document.prototype.createLabel = function(tag, schema) {
+    return this.createElement(tag).renderSchemaLabel(schema);
+}
+
+/**
+ * @param {VmSchema} schema
+ * @param {any} value
+ */
+Document.prototype.createField = function(schema, value) {
+    if (schema.type === "textarea") {
+        return this.createElement("textarea").renderSchema(schema, value);
+    } else if (schema.options === undefined) {
+        return this.createElement("input").renderSchema(schema, value);
+    } else {
+        return this.createElement("select").renderSchema(schema, value);
+    }
 }
 
 /**
@@ -130,6 +147,10 @@ Node.prototype.equals = function(tag) {
     return this.nodeName.toLowerCase() === tag.toLowerCase();
 }
 
+/**
+ * @param {Element} element
+ * @returns {Element}
+ */
 Element.prototype.replaceFirstElementChild = function(element) {
     const existing = this.firstElementChild;
     if (existing) {
@@ -137,8 +158,14 @@ Element.prototype.replaceFirstElementChild = function(element) {
     } else {
         this.appendChild(element);
     }
+    return element;
 };
 
+/**
+ * @param {number} index
+ * @param {Element} element
+ * @returns {Element}
+ */
 Element.prototype.replaceElementChild = function(index, element) {
     const existing = this.children.item(index);
     if (existing) {
@@ -146,8 +173,14 @@ Element.prototype.replaceElementChild = function(index, element) {
     } else {
         this.appendChild(element);
     }
+    return element;
 }
 
+/**
+ * @param {number} index
+ * @param {string} tag
+ * @returns {Element}
+ */
 Element.prototype.getElementChildOrCreate = function(index, tag) {
     let element = this.children.item(index)
     if (element === null) {
@@ -157,52 +190,104 @@ Element.prototype.getElementChildOrCreate = function(index, tag) {
     return element;
 }
 
+/**
+ * @param {number} length
+ */
 Element.prototype.truncateElementChildren = function(length) {
     for (let d = this.children.length - 1; d >= length; --d) {
         this.children.item(d).remove();
     }
 }
 
+HTMLLabelElement.prototype.renderSchemaLabel = function(schema) {
+    this.htmlFor = schema.id;
+    this.innerText = schema.label;
+    return this;
+}
+
+HTMLTableCellElement.prototype.renderSchemaLabel = function(schema) {
+    this.innerText = schema.label;
+    return this;
+}
+
 /**
  * @param {VmSchema} schema
  * @param {any} value
+ * @param {number|string|bigint|undefined} value
  */
-HTMLInputElement.prototype.connectSchema = function(schema, value) {
+HTMLTableCellElement.prototype.renderSchema = function(schema, value) {
+    this.innerText = value;
+    return this;
+}
+
+/**
+ * @param {VmSchema} schema
+ * @param {any} value
+ * @param {number|string|bigint|undefined} value
+ */
+HTMLInputElement.prototype.renderSchema = function(schema, value) {
     switch (schema.type) {
-        case 'int':
+        case "int":
+        case "number":
+        case "float":
             this.type = "number";
             this.step = "1";
-            this.min = schema.min !== undefined ? schema.min.toString() : "";
-            this.max = schema.max !== undefined ? schema.max.toString() : "";
+            this.name = schema.name;
+            this.value = value;
+            if (schema.min !== undefined) {
+                this.min = schema.min.toString();
+            }
+            if (schema.max !== undefined) {
+                this.max = schema.max.toString();
+            }
             break;
-        case 'string':
-            this.pattern = schema.pattern !== undefined ? schema.pattern : "";
+        case "string":
+        case "text":
+            this.type = "text";
+            this.name = schema.name;
+            this.value = value;
+            if (schema.pattern !== undefined) {
+                this.pattern = schema.pattern;
+            }
+            if (schema.maxLength !== undefined) {
+                this.maxLength = schema.maxLength;
+            }
             break;
     }
+    this.id = schema.id;
     this.name = schema.name;
     this.value = value;
     this.placeholder = schema.label !== undefined ? schema.label : "";
-    this.onchange = schema.revalidate ? (event) => schema.revalidateValue(event.target.value) : null;
+
+    return this;
 }
 
 /**
  * @param {VmSchema} schema
  * @param {any} value
  */
-HTMLSelectElement.prototype.connectSchema = function(schema, value) {
-    switch (schema.type) {
-        case 'int':
-            this.type = "number";
-            this.step = "1";
-            this.min = schema.min !== undefined ? schema.min.toString() : "";
-            this.max = schema.max !== undefined ? schema.max.toString() : "";
-            break;
-        case 'string':
-            this.pattern = schema.pattern !== undefined ? schema.pattern : "";
-            break;
+HTMLSelectElement.prototype.renderSchema = function(schema, value) {
+    let i = 0;
+    for (const option of schema.options) {
+        const opt = document.createElement("option");
+        if (typeof option === "number" || typeof option === "string") {
+            opt.value = option;
+            opt.innerText = option;
+            if (value == option) {
+                opt.selected = true;
+            }
+        } else {
+            opt.value = option.value;
+            opt.innerText = option.label;
+            if (value == option.value) {
+                opt.selected = true;
+            }
+        }
+        this.replaceElementChild(i++, opt);
     }
-    this.name = schema.name;
+    this.truncateElementChildren(i);
+
     this.value = value;
-    this.placeholder = schema.label !== undefined ? schema.label : "";
-    this.onchange = schema.revalidate ? (event) => schema.revalidateValue(event.target.value) : null;
+
+    return this;
 }

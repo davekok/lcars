@@ -65,7 +65,6 @@ class ViewModel {
      * @param {string} ref
      * @param {object} parameters
      * @param {object} data
-     * @return {Promise<void>}
      */
     async navigate(ref, parameters, data) {
         if (ref === "@current") {
@@ -94,7 +93,6 @@ class ViewModel {
         const vm = await response.json();
         this.current = ref;
         await this.update(vm);
-        await this.view?.renderView(this);
     }
 
     /**
@@ -129,6 +127,7 @@ class ViewModel {
         globalThis.document.updateTheme(this.main.head.theme);
         await globalThis.document.updateDesign(this.main.head.design);
         globalThis.document.updateIcon(this.main.head.icon);
+        await this.view?.renderView(this);
     }
 }
 
@@ -358,6 +357,7 @@ class VmHead {
 }
 
 class VmSchema {
+    #id;
     #vm;
     #schema;
     #linkManager;
@@ -374,6 +374,13 @@ class VmSchema {
         this.#schema = schema;
         this.#linkManager = linkManager;
         this.#isParameter = isParameter;
+    }
+
+    /**
+     * @return {string}
+     */
+    get id() {
+        return this.#id ??= this.name + "-" + Math.random().toString(36).replace('0.', '');
     }
 
     /**
@@ -407,13 +414,6 @@ class VmSchema {
     /**
      * @return {string}
      */
-    get bind() {
-        return this.#schema.bind;
-    }
-
-    /**
-     * @return {string}
-     */
     get slot() {
         return this.#schema.slot;
     }
@@ -430,6 +430,20 @@ class VmSchema {
      */
     get max() {
         return this.#schema.max;
+    }
+
+    /**
+     * @return {string}
+     */
+    get pattern() {
+        return this.#schema.pattern;
+    }
+
+    /**
+     * @return {int}
+     */
+    get maxLength() {
+        return this.#schema.maxLength;
     }
 
     /**
@@ -474,107 +488,19 @@ class VmSchema {
         return this.#schema.state ?? "editable";
     }
 
-    createLabel() {
-        if (this.state === "hidden") {
-            return null;
+    bind(value, discriminator) {
+        if (typeof value === "object" && "onchange" in value) {
+            value.onchange = this.revalidate ? (event) => this.revalidateValue(event.target.value) : null;
+        }
+        if (this.#schema.bind !== undefined) {
+            this.#linkManager.addField(this.#schema.bind, this.name, value, discriminator, this.#isParameter || this.#schema.asParameter === true);
         }
 
-        const label = document.createElement("label");
-        label.innerText = this.label;
-        return label;
-    }
-
-    createDisplay(value, discriminator) {
-        this.#linkManager.addField(this, value, discriminator, this.#isParameter);
-
-        if (this.state === "hidden") {
-            return null;
-        }
-
-        const display = document.createElement("span");
-
-        if (this.options instanceof Array) {
-            for (const option of this.options) {
-                const opt = document.createElement("option");
-                if (typeof option === "number" || typeof option === "string") {
-                    if (value == option) {
-                        display.innerText = option;
-                        return display;
-                    }
-                } else {
-                    if (value == option.value) {
-                        display.innerText = option.label;
-                        return display;
-                    }
-                }
-            }
-            return display;
-        }
-
-        display.innerText = value;
-
-        return display;
+        return value;
     }
 
     revalidateValue(value) {
         this.#vm.navigate("@current", {[this.name]: value})
-    }
-
-    createField(value, discriminator) {
-        this.#linkManager.addField(this, value, discriminator, this.#isParameter);
-
-        if (this.state === "hidden") {
-            return null;
-        }
-
-        let field;
-
-        if (this.options instanceof Array) {
-            field = document.createElement("select");
-            for (const option of this.options) {
-                const opt = document.createElement("option");
-                if (typeof option === "number" || typeof option === "string") {
-                    opt.value = option;
-                    opt.innerText = option;
-                    if (value == option) {
-                        opt.selected = true;
-                    }
-                } else {
-                    opt.value = option.value;
-                    opt.innerText = option.label;
-                    if (value == option.value) {
-                        opt.selected = true;
-                    }
-                }
-                field.appendChild(opt);
-            }
-        } else {
-            switch (this.type) {
-                case 'int':
-                    field = document.createElement("input");
-                    field.type = "number";
-                    field.step = "1";
-                    field.name = this.name;
-                    field.value = value;
-                    if (this.min !== undefined) {
-                        field.min = this.min.toString();
-                    }
-                    if (this.max !== undefined) {
-                        field.max = this.max.toString();
-                    }
-                    break;
-            }
-        }
-
-        if (this.label !== undefined) {
-            field.placeholder = this.label;
-            field.title = this.label;
-        }
-        if (this.revalidate) {
-            field.addEventListener("change", (event) => this.revalidateValue(event.target.value));
-        }
-
-        return field;
     }
 }
 
@@ -635,10 +561,11 @@ class VmLink {
     }
 
     /**
+     * @param {string|number|bigint|undefined} discriminator
      * @returns {void}
      */
-    follow() {
-        const {parameters, data} = this.#linkManager.getValues(this.name);
+    follow(discriminator = undefined) {
+        const {parameters, data} = this.#linkManager.getValues(this.name, discriminator);
         this.#vm.navigate(this.ref, parameters, data);
     }
 }
@@ -651,7 +578,12 @@ class LinkManager {
         this.#links = new Map();
     }
 
-    #getLinkage(link, discriminator) {
+    /**
+     * @param {string} link
+     * @param {string|number|bigint|undefined} discriminator
+     * @returns {object}
+     */
+    #getLinkage(link, discriminator = undefined) {
         if (discriminator !== undefined) {
             link += discriminator;
         }
@@ -667,47 +599,52 @@ class LinkManager {
     }
 
     /**
-     * @param {VmSchema} schema
+     * @param {string} link
+     * @param {string} name
      * @param {HTMLInputElement|HTMLSelectElement|string|number|bigint|boolean} field
      * @param {string|number} discriminator
      * @param {boolean} isParameter
      */
-    addField(schema, field, discriminator, isParameter) {
-        if (schema.bind === undefined) {
-            return;
-        }
+    addField(link, name, field, discriminator, isParameter) {
         if (isParameter) {
-            this.#getLinkage(schema.bind, discriminator).parameters.push([schema.name, field]);
+            this.#getLinkage(link, discriminator).parameters.push([name, field]);
         } else {
-            this.#getLinkage(schema.bind, discriminator).data.push([schema.name, field]);
+            this.#getLinkage(link, discriminator).data.push([name, field]);
         }
     }
 
+    /**
+     * @param {string} link
+     * @param {string|number|bigint|undefined} discriminator
+     * @returns {object}
+     */
     getValues(link, discriminator) {
         if (discriminator !== undefined) {
             link += discriminator;
         }
+        const linkage = this.#links.get(link);
+        if (linkage === undefined) {
+            return {parameters: {}, data: {}};
+        }
+
         const parameterValues = {};
         const dataValues = {};
-        const linkage = this.#links.get(link) ?? [];
-        for (const {parameters, data} of linkage) {
-            for (const [name, field] of parameters) {
-                if (['string', 'number', 'boolean', 'bigint'].includes(typeof field)) {
-                    parameterValues[name] = field;
-                } else if ("value" in field) {
-                    parameterValues[name] = field.value;
-                } else {
-                    throw new Error(`Unable to fetch value from field ${name}.`);
-                }
+        for (const [name, field] of linkage.parameters) {
+            if (['string', 'number', 'boolean', 'bigint'].includes(typeof field)) {
+                parameterValues[name] = field;
+            } else if ("value" in field) {
+                parameterValues[name] = field.value;
+            } else {
+                throw new Error(`Unable to fetch value from field ${name}.`);
             }
-            for (const [name, field] of data) {
-                if (['string', 'number', 'boolean', 'bigint'].includes(typeof field)) {
-                    dataValues[name] = field;
-                } else if ("value" in field) {
-                    dataValues[name] = field.value;
-                } else {
-                    throw new Error(`Unable to fetch value from field ${name}.`);
-                }
+        }
+        for (const [name, field] of linkage.data) {
+            if (['string', 'number', 'boolean', 'bigint'].includes(typeof field)) {
+                dataValues[name] = field;
+            } else if ("value" in field) {
+                dataValues[name] = field.value;
+            } else {
+                throw new Error(`Unable to fetch value from field ${name}.`);
             }
         }
 
@@ -716,4 +653,4 @@ class LinkManager {
 }
 
 globalThis.viewModel = new ViewModel();
-await globalThis.viewModel.navigate("@default");
+globalThis.viewModel.navigate("@default");

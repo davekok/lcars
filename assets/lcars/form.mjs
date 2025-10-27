@@ -1,13 +1,21 @@
 const css = `
-    :host form {
-        display: grid;
-        grid-template-columns: 5rem 10rem;
-    }
-    :host form>label {
-        grid-column: 1;
-    }
-    :host form>input {
-        grid-column: 2;
+    :host {
+        padding: 0 5rem;
+        h1 {
+            color: var(--theme-color-7);
+        }
+        form {
+            display: grid;
+            grid-template-columns: 5rem 10rem;
+            grid-gap: 0.5rem 1.5rem;
+            label {
+                grid-column: 1;
+                color: var(--theme-color-7);
+            }
+            input {
+                grid-column: 2;
+            }
+        }
     }
 `;
 
@@ -26,24 +34,21 @@ customElements.define("lcars-form", class LcarsForm extends HTMLElement
         this.#shadow.appendChild(this.#form = document.createElement("form"));
     }
 
-    render(vm)
+    /**
+     * @param {VmComponentModel} componentModel
+     */
+    render(componentModel)
     {
-        this.#title.textContent = vm.head.title;
+        this.#title.textContent = componentModel.head.title;
         this.#form.innerHTML = "";
-        for (const field of vm.fields) {
-            const label = document.createElement("label");
-            const id = Math.random().toString(36).replace('0.', '');
-            label.htmlFor = id;
-            label.textContent = field.label;
-            const input = document.createElement("input");
-            input.id = id;
-            input.name = field.name;
-            input.type = field.type;
-            input.readOnly = field.readonly ?? false;
-            input.disabled = field.disabled ?? false;
-            input.value = vm.data[field.name];
-            this.#form.appendChild(label);
-            this.#form.appendChild(input);
+        for (const schema of componentModel.schema) {
+            const value = componentModel.data[schema.name];
+            if (schema.hidden) {
+                schema.bind(value);
+                continue;
+            }
+            this.#form.appendChild(document.createLabel("label", schema));
+            this.#form.appendChild(schema.bind(document.createField(schema, value)));
         }
     }
 });

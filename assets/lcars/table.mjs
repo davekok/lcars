@@ -127,11 +127,10 @@ customElements.define("lcars-table", class LcarsTable extends HTMLElement
 
         let i = 0;
         for (const schema of vmComponentModel.schema) {
-            const label = schema.createLabel();
-            if (!label) {
+            if (schema.hidden) {
                 continue;
             }
-            this.#headRow.getElementChildOrCreate(i++, "th").replaceFirstElementChild(label);
+            this.#headRow.getElementChildOrCreate(i++, "th").renderSchemaLabel(schema);
         }
         this.#headRow.truncateElementChildren(i);
 
@@ -140,15 +139,17 @@ customElements.define("lcars-table", class LcarsTable extends HTMLElement
             let j = 0;
             const row = this.#tbody.getElementChildOrCreate(i, "tr");
             for (const schema of vmComponentModel.schema) {
-                const display = schema.createDisplay(record[schema.name], i);
-                if (!display) {
+                const value = record[schema.name];
+                if (schema.hidden) {
+                    schema.bind(value, i);
                     continue;
                 }
-                row.getElementChildOrCreate(j++, "td").replaceFirstElementChild(display);
+                schema.bind(row.getElementChildOrCreate(j++, "td").renderSchema(schema, value), i);
             }
-            row.truncateElementChildren(j)
+            row.truncateElementChildren(j);
             for (const link of vmComponentModel.getLinksForSlot("table-row")) {
-                row.onclick = (evt) => link.follow();
+                const discriminator = i;
+                row.onclick = (evt) => link.follow(discriminator);
             }
             ++i;
         }
@@ -164,15 +165,16 @@ customElements.define("lcars-table", class LcarsTable extends HTMLElement
         };
         for (const schema of vmComponentModel.parameterSchema) {
             if (schema.hidden) {
+                schema.bind(vmComponentModel.parameters[schema.name]);
                 return;
             }
             switch (schema.slot) {
                 case "table-bottom-left-bar":
-                    this.#tableBottomLeftBar.replaceElementChild(index[schema.slot]++, schema.createField(vmComponentModel.parameters[schema.name]));
+                    this.#tableBottomLeftBar.replaceElementChild(index[schema.slot]++, schema.bind(document.createField(schema, vmComponentModel.parameters[schema.name])));
                     break;
 
                 case "table-bottom-right-bar":
-                    this.#tableBottomRightBar.replaceElementChild(index[schema.slot]++, schema.createField(vmComponentModel.parameters[schema.name]));
+                    this.#tableBottomRightBar.replaceElementChild(index[schema.slot]++, schema.bind(document.createField(schema, vmComponentModel.parameters[schema.name])));
                     break;
             }
         }

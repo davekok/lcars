@@ -67,16 +67,34 @@ return new class
             }
         }
 
+        return $this->loadModel($cvm);
+    }
+
+    private function loadModel(object $cvm): object
+    {
+        // Normally this would be a query builder to fetch data.
+
         if (!isset($cvm->data) || !is_string($cvm->data) || !str_starts_with($cvm->data, "@")) {
             return $cvm;
         }
+        $ref = substr($cvm->data, 1);
 
+        $filterOnId = false;
+        if (str_ends_with($ref, "/:id")) {
+            $ref = substr($ref, 0, -4);
+            $filterOnId = true;
+        }
 
-        // Normally this would be a query builder to fetch data.
+        $ref = strtr($ref, self::SPECIAL_CHARS, str_repeat("-", strlen(self::SPECIAL_CHARS)));
+        $file = __DIR__ . "/model/$ref.json";
+        if (!file_exists($file)) {
+            return $cvm;
+        }
 
-        $cvm->data = $this->loadModel(substr($cvm->data, 1));
+        $cvm->data = json_decode(file_get_contents($file), flags: JSON_THROW_ON_ERROR);
 
-        if (($cvm->head->shape ?? "none") !== "table") {
+        if ($filterOnId === true) {
+            $cvm->data = array_find($cvm->data, fn ($v) => $v->id === $cvm->parameters->id);
             return $cvm;
         }
 
@@ -100,16 +118,5 @@ return new class
         }
 
         return $cvm;
-    }
-
-    private function loadModel(string $ref): array
-    {
-        $ref = strtr($ref, self::SPECIAL_CHARS, str_repeat("-", strlen(self::SPECIAL_CHARS)));
-        $file = __DIR__ . "/model/$ref.json";
-        if (!file_exists($file)) {
-            return [];
-        }
-
-        return json_decode(file_get_contents($file), flags: JSON_THROW_ON_ERROR);
     }
 };

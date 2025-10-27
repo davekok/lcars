@@ -1,10 +1,10 @@
 {
   "head": {
-    "title": "Vehicles",
+    "title": "Vehicle",
     "layer": "main",
     "layout": "header-main-layout",
-    "component": "table",
-    "shape": "table",
+    "component": "form",
+    "shape": "object",
     "slot": "main",
     "joins": [
       "@menu"
@@ -12,36 +12,20 @@
   },
   "parameterSchema": [
     {
-      "name": "page",
+      "name": "id",
       "type": "int",
-      "label": "Page",
-      "min": 1,
-      "slot": "table-bottom-right-bar",
-      "revalidate": true
-    },
-    {
-      "name":"pageSize",
-      "type": "int",
-      "options": [10,20,50,100],
-      "label": "Size",
-      "slot": "table-bottom-right-bar",
-      "revalidate": true
+      "label": "Id"
     }
   ],
   "parameters": {
-    "page": 1,
-    "pageSize": 20,
-    "sortBy": "vehicle",
-    "sortDirection": "asc"
+    "id": 1
   },
   "schema": [
     {
       "name": "id",
       "label": "Id",
       "type": "number",
-      "state": "hidden",
-      "bind": "show-vehicle",
-      "asParameter": true
+      "state": "hidden"
     },
     {
       "name": "manufacturer",
@@ -79,12 +63,5 @@
       "type": "text"
     }
   ],
-  "data": "@vehicles",
-  "links": [
-    {
-      "name": "show-vehicle",
-      "ref": "vehicle",
-      "slot": "table-row"
-    }
-  ]
+  "data": "@vehicles/:id"
 }

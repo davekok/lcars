@@ -1,29 +1,31 @@
 {
   "head": {
-    "title": "Internet Connections",
+    "title": "Internet Connection",
     "layer": "main",
     "layout": "header-main-layout",
-    "component": "table",
-    "shape": "table",
+    "component": "form",
+    "shape": "object",
     "slot": "main",
     "joins": [
       "@menu"
     ]
   },
+  "parameterSchema": [
+    {
+      "name": "id",
+      "type": "int",
+      "label": "Id"
+    }
+  ],
   "parameters": {
-    "page": 1,
-    "pageSize": 20,
-    "sortBy": "protocol",
-    "sortDirection": "asc"
+    "id": 1
   },
   "schema": [
     {
       "name": "id",
       "label": "Id",
       "type": "number",
-      "state": "hidden",
-      "bind": "show-record",
-      "asParameter": true
+      "state": "hidden"
     },
     {
       "name": "protocol",
@@ -51,12 +53,5 @@
       "type": "text"
     }
   ],
-  "data": "@internet-connections",
-  "links": [
-    {
-      "name": "show-record",
-      "ref": "internet-connection",
-      "slot": "table-row"
-    }
-  ]
+  "data": "@internet-connections/:id"
 }
